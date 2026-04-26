@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Picspect — Image Forensic Analysis Tool</title>
+  <meta name="description" content="Detect duplicate, manipulated, and copy-pasted images in research papers and audit documents. Desktop tool for macOS.">
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --surface: #131825;
+      --border: #1e2536;
+      --text: #e2e8f0;
+      --muted: #8892a8;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --green: #22c55e;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Nav */
+    nav {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-left: 28px;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 100px 0 80px;
+    }
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--muted); }
+    .btn small {
+      font-weight: 400;
+      opacity: 0.7;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(59,130,246,0.12);
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    /* Screenshots */
+    .screenshots {
+      padding: 0 0 80px;
+    }
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 24px;
+    }
+    .screenshot-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .screenshot-card img {
+      width: 100%;
+      display: block;
+    }
+    .screenshot-card p {
+      padding: 16px 20px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    @media (max-width: 640px) {
+      .screenshot-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Features */
+    .features {
+      padding: 80px 0;
+    }
+    .features h2 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .features > .container > p {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 48px;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px;
+    }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+      background: rgba(59,130,246,0.1);
+    }
+    .feature-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    /* How it works */
+    .how-it-works {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    .how-it-works h2 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 48px;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      text-align: center;
+    }
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .steps h3 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+    .steps p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Pricing */
+    .pricing {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    .pricing h2 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .pricing > .container > p {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 48px;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 36px;
+    }
+    .pricing-card.featured {
+      border-color: var(--accent);
+      position: relative;
+    }
+    .pricing-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+    .pricing-card .price {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin: 12px 0 20px;
+    }
+    .pricing-card .price small {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .pricing-card ul {
+      list-style: none;
+      margin-bottom: 28px;
+    }
+    .pricing-card li {
+      padding: 6px 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    .pricing-card li::before {
+      content: "\2713";
+      color: var(--green);
+      font-weight: 700;
+      margin-right: 10px;
+    }
+
+    /* Tech */
+    .tech {
+      padding: 60px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .tech h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .tech-tag {
+      padding: 8px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+    footer a:hover { color: var(--text); }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2.2rem; }
+      .hero p { font-size: 1rem; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <div class="logo">Picspect</div>
+      <div>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="ko/">Korean</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">v0.1.0-beta.2 — Now Available for macOS</div>
+      <h1>Detect image fraud<br>in <span>seconds</span></h1>
+      <p>Forensic-grade duplicate detection, error level analysis, and copy-move detection for research papers and audit documents.</p>
+      <div class="hero-buttons">
+        <a href="https://github.com/soonhobahng/picspect-releases/releases/latest/download/Picspect_0.1.0_aarch64.dmg" class="btn btn-primary">
+          Download for Mac <small>Apple Silicon</small>
+        </a>
+        <a href="https://github.com/soonhobahng/picspect-releases/releases/latest/download/Picspect_0.1.0_x64.dmg" class="btn btn-secondary">
+          Download for Mac <small>Intel</small>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="screenshots">
+    <div class="container">
+      <div class="screenshot-grid">
+        <div class="screenshot-card">
+          <img src="screenshots/PicSpect_IMG_Scan.png" alt="Picspect duplicate scan results" loading="lazy" />
+          <p>Scan thousands of images and instantly find exact duplicates grouped by content hash</p>
+        </div>
+        <div class="screenshot-card">
+          <img src="screenshots/PicSpect_PDF_parsing.png" alt="Picspect PDF image extraction" loading="lazy" />
+          <p>Extract all embedded images from PDF documents with format detection and metadata</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="container">
+      <h2>Everything you need to audit images</h2>
+      <p>Purpose-built for academic integrity officers, journal editors, and forensic auditors.</p>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#128269;</div>
+          <h3>Duplicate Detection</h3>
+          <p>Multi-stage pipeline using SHA-256, perceptual hashing, and visual comparison. Finds duplicates even after resizing, cropping, or re-compression.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128196;</div>
+          <h3>PDF Image Extraction</h3>
+          <p>Extract all embedded images from PDF documents with a single click. Supports JPEG and PNG with lossless extraction.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#9878;</div>
+          <h3>Error Level Analysis</h3>
+          <p>Detect tampering by analyzing JPEG compression artifacts. Manipulated regions appear as bright spots in the ELA visualization.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128203;</div>
+          <h3>Copy-Move Detection</h3>
+          <p>Identify copy-pasted regions within a single image using block-based DCT matching with visual overlay highlighting.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128200;</div>
+          <h3>Side-by-Side Comparison</h3>
+          <p>Compare any two images with slider, side-by-side, and diff views. RMSE distortion metric with instant similar/different verdict.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128195;</div>
+          <h3>PDF Audit Report</h3>
+          <p>Auto-generate professional audit reports with thumbnails of flagged duplicates and similarity scores. Ready to share with stakeholders.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div>
+          <div class="step-num">1</div>
+          <h3>Select a Folder or PDF</h3>
+          <p>Choose a folder of images or a PDF document to analyze.</p>
+        </div>
+        <div>
+          <div class="step-num">2</div>
+          <h3>Scan for Issues</h3>
+          <p>Picspect runs multi-stage analysis: hashing, perceptual comparison, and visual verification.</p>
+        </div>
+        <div>
+          <div class="step-num">3</div>
+          <h3>Review Results</h3>
+          <p>Browse exact duplicates, similar pairs, and run ELA or copy-move detection on flagged images.</p>
+        </div>
+        <div>
+          <div class="step-num">4</div>
+          <h3>Export Report</h3>
+          <p>Generate a PDF audit report with all findings, ready for review or submission.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <h2>Simple Pricing</h2>
+      <p>Start for free. Upgrade when you need more.</p>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Free</h3>
+          <div class="price">$0 <small>/ month</small></div>
+          <ul>
+            <li>5 scans per month</li>
+            <li>3 PDF extractions per month</li>
+            <li>10 comparisons per month</li>
+            <li>All features included</li>
+            <li>Resets monthly</li>
+          </ul>
+          <a href="https://github.com/soonhobahng/picspect-releases/releases/latest" class="btn btn-secondary" style="width:100%;justify-content:center;">Download Free</a>
+        </div>
+        <div class="pricing-card featured">
+          <h3>Pro</h3>
+          <div class="price">Contact Us</div>
+          <ul>
+            <li>Unlimited scans</li>
+            <li>Unlimited PDF extractions</li>
+            <li>Unlimited comparisons</li>
+            <li>All features included</li>
+            <li>Offline license — no internet required</li>
+          </ul>
+          <a href="mailto:sales@gsinsight.com" class="btn btn-primary" style="width:100%;justify-content:center;">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tech">
+    <div class="container">
+      <h2>Built with Performance in Mind</h2>
+      <div class="tech-tags">
+        <span class="tech-tag">Rust</span>
+        <span class="tech-tag">Tauri v2</span>
+        <span class="tech-tag">React 19</span>
+        <span class="tech-tag">GraphicsMagick</span>
+        <span class="tech-tag">SHA-256</span>
+        <span class="tech-tag">Perceptual Hashing</span>
+        <span class="tech-tag">AES-256-GCM</span>
+        <span class="tech-tag">SQLite</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 GSInsight. All rights reserved.</p>
+      <p style="margin-top: 8px;">
+        <a href="mailto:sales@gsinsight.com">sales@gsinsight.com</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
