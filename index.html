@@ -235,6 +235,61 @@
       font-size: 0.9rem;
     }
 
+    /* Use Cases */
+    .use-cases {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    .use-cases h2 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .use-cases > .container > p {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 48px;
+    }
+    .use-case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .use-case-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px;
+    }
+    .use-case-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .use-case-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .use-case-card p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 16px;
+    }
+    .use-case-card ul {
+      list-style: none;
+    }
+    .use-case-card li {
+      padding: 4px 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .use-case-card li::before {
+      content: "\2192";
+      color: var(--accent);
+      margin-right: 8px;
+    }
+
     /* Pricing */
     .pricing {
       padding: 80px 0;
@@ -354,6 +409,7 @@
       <div>
         <a href="#features">Features</a>
         <a href="#how-it-works">How It Works</a>
+        <a href="#use-cases">Use Cases</a>
         <a href="#pricing">Pricing</a>
         <a href="ko/">Korean</a>
       </div>
@@ -453,6 +509,45 @@
           <div class="step-num">4</div>
           <h3>Export Report</h3>
           <p>Generate a PDF audit report with all findings, ready for review or submission.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="use-cases" id="use-cases">
+    <div class="container">
+      <h2>Who Uses Picspect</h2>
+      <p>Trusted by professionals who need to verify image authenticity.</p>
+      <div class="use-case-grid">
+        <div class="use-case-card">
+          <div class="use-case-icon">&#127891;</div>
+          <h3>Research Integrity</h3>
+          <p>Universities and journal editors use Picspect to screen submitted papers for duplicated or manipulated figures — catching fraud before publication.</p>
+          <ul>
+            <li>Research ethics committees</li>
+            <li>Academic journal editors</li>
+            <li>Grant review boards</li>
+          </ul>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">&#128737;</div>
+          <h3>Insurance Fraud Detection</h3>
+          <p>Claims adjusters detect reused or altered photos across multiple claims — preventing payouts on fabricated or exaggerated damage.</p>
+          <ul>
+            <li>Claims investigation teams</li>
+            <li>Special investigation units</li>
+            <li>Loss adjusters</li>
+          </ul>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">&#9878;</div>
+          <h3>Forensic Auditing</h3>
+          <p>Auditors verify the authenticity of photographic evidence in financial reports, compliance documents, and legal proceedings.</p>
+          <ul>
+            <li>Audit firms</li>
+            <li>Legal teams</li>
+            <li>Compliance officers</li>
+          </ul>
         </div>
       </div>
     </div>

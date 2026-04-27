@@ -235,6 +235,61 @@
       font-size: 0.9rem;
     }
 
+    /* Use Cases */
+    .use-cases {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    .use-cases h2 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .use-cases > .container > p {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 48px;
+    }
+    .use-case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .use-case-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px;
+    }
+    .use-case-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .use-case-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .use-case-card p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 16px;
+    }
+    .use-case-card ul {
+      list-style: none;
+    }
+    .use-case-card li {
+      padding: 4px 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .use-case-card li::before {
+      content: "\2192";
+      color: var(--accent);
+      margin-right: 8px;
+    }
+
     /* Pricing */
     .pricing {
       padding: 80px 0;
@@ -352,9 +407,10 @@
     <div class="container">
       <div class="logo">Picspect</div>
       <div>
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#pricing">Pricing</a>
+        <a href="#features">기능</a>
+        <a href="#how-it-works">사용법</a>
+        <a href="#use-cases">활용 사례</a>
+        <a href="#pricing">가격</a>
         <a href="../">English</a>
       </div>
     </div>
@@ -453,6 +509,45 @@
           <div class="step-num">4</div>
           <h3>보고서 내보내기</h3>
           <p>모든 분석 결과가 포함된 PDF 감사 보고서를 생성하여 검토 또는 제출할 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="use-cases" id="use-cases">
+    <div class="container">
+      <h2>어디에서 사용하나요?</h2>
+      <p>이미지 진위 확인이 필요한 전문가들이 사용합니다.</p>
+      <div class="use-case-grid">
+        <div class="use-case-card">
+          <div class="use-case-icon">&#127891;</div>
+          <h3>연구 윤리 검증</h3>
+          <p>대학과 학술지 편집부에서 투고 논문의 이미지 중복·조작 여부를 사전에 검출하여 출판 전 부정행위를 방지합니다.</p>
+          <ul>
+            <li>연구윤리위원회</li>
+            <li>학술지 편집위원</li>
+            <li>연구재단 심사위원</li>
+          </ul>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">&#128737;</div>
+          <h3>보험 사기 탐지</h3>
+          <p>손해사정사가 여러 보험 청구 건에서 동일 사진 재사용이나 변조된 피해 사진을 탐지하여 허위 청구를 방지합니다.</p>
+          <ul>
+            <li>보험 조사팀</li>
+            <li>특별조사부 (SIU)</li>
+            <li>손해사정사</li>
+          </ul>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">&#9878;</div>
+          <h3>포렌식 감사</h3>
+          <p>감사인이 재무보고서, 컴플라이언스 문서, 법적 증거물의 사진 진위를 검증합니다.</p>
+          <ul>
+            <li>감사법인</li>
+            <li>법무팀</li>
+            <li>컴플라이언스 담당자</li>
+          </ul>
         </div>
       </div>
     </div>
